@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 
 
-import { XButton,Icon,Sticky,Tab, TabItem,Swiper } from 'vux'
+import { Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
 
 Vue.component('x-button', XButton)
 Vue.component('icon', Icon)
@@ -16,6 +16,31 @@ Vue.component('sticky', Sticky)
 Vue.component('tab', Tab)
 Vue.component('tab-item', TabItem)
 Vue.component('swiper', Swiper);
+Vue.component('swiper', Swiper);
+Vue.component("swiper-item",SwiperItem)
+Vue.component("group",Group);
+Vue.component('x-input', XInput)
+Vue.component('x-address', XAddress)
+Vue.component('x-textarea', XTextarea)
+Vue.component('radio', Radio)
+Vue.component('x-switch', XSwitch)
+Vue.component('flexbox', Flexbox)
+Vue.component('flexbox-item', FlexboxItem)
+Vue.component('panel', Panel)
+Vue.component('cell-box', CellBox)
+Vue.component('cell', Cell)
+Vue.component('cell', Cell)
+Vue.component('checker', Checker)
+Vue.component('checker-item', CheckerItem)
+Vue.component('popup', Popup)
+Vue.component('popup-picker', PopupPicker)
+Vue.component('x-number', XNumber)
+Vue.component('x-header', XHeader)
+Vue.component('swipeout', Swipeout)
+Vue.component('swipeout-item', SwipeoutItem)
+Vue.component('swipeout-button', SwipeoutButton)
+
+
 
 Vue.use(VueRouter);
 

@@ -1,18 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloFromVux from '@/components/HelloFromVux'
+import Index from '@/components/Index'
 import Address from '@/components/Address'
+import Test from '@/components/Test'
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloFromVux',
-      component: HelloFromVux
+      name: 'Index',
+      component: Index
     },
     {
       path: '/Address',
       name: 'Address',
       component: Address
     },
+    {
+      path: '/Test',
+      name: 'Test',
+      component: Test
+    }
   ]
 })
