@@ -47,9 +47,16 @@
       </cell-box>
     </group>
 
-    <popup v-model="showPopup" style="background-color: white;height:400rem;overflow: scroll;position: relative;" class="checker-popup">
+    <popup v-model="showPopup" style="background-color: white;height:500px;" class="checker-popup">
       <x-header @header-background-color="'#009cff'"
-                style="position: absolute;left: 0;top: 0;right: 0;z-index: 999;"></x-header>
+                style="position: fixed;left: 0;right: 0;bottom:460px;z-index: 99999;"
+                :right-options="{showMore: true}" @on-click-more="showMenus = true"
+                @on-click-back="onItemClick"
+                :left-options="{preventGoBack:true}">
+        <div v-transfer-dom>
+          <actionsheet  @on-click-menu="rightHeaderClick" :menus="menus" v-model="showMenus" show-cancel></actionsheet>
+        </div>
+      </x-header>
       <div style="margin-top: 41px">
         <swipeout>
           <swipeout-item transition-mode="follow">
@@ -249,12 +256,16 @@
 
 <script>
   import {Panel, Group, Radio} from 'vux'
-
+  import { XHeader, Actionsheet, TransferDom, ButtonTab, ButtonTabItem } from 'vux'
   export default {
+    directives: {
+      TransferDom
+    },
     components: {
       Panel,
       Group,
-      Radio
+      Radio,
+      Actionsheet
     },
     methods: {
       onItemClick() {
@@ -262,6 +273,11 @@
       },
       submit() {
         alert("提交成功！");
+      },
+      rightHeaderClick(menuKey, menuItem){
+          if(menuItem==this.menus.menu1){
+            this.$router.push('/address')
+          }
       }
     },
     data() {
@@ -280,7 +296,11 @@
         selectedpayMethod: [],
         total: 0,
         isagree: false,
-        showPopup: false
+        showPopup: false,
+        showMenus:false,
+        menus: {
+          menu1: '新建地址'
+        }
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div style="height:100%">
-    <x-header>地址管理</x-header>
-    <tab  :line-width="2"  v-model="index">
+    <x-header style="position: fixed;top: 0;left: 0;right: 0;z-index: 9999;">地址管理</x-header>
+    <tab  :line-width="2"  v-model="index" style="margin-top: 40px;">
       <tab-item selected>我的地址</tab-item>
       <tab-item>常用联系人</tab-item>
     </tab>
