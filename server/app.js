@@ -5,9 +5,19 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const session=require("koa-session");
+
+require("./models");
 
 const index = require('./routes/index')
 const users = require('./routes/users')
+const auth=require("./auth");
+const config=require("./config");
+
+app.keys = config.keys;
+
+
+
 
 // error handler
 onerror(app)
@@ -18,11 +28,16 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/'))
+app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
+
+app.use(session(config.session,app))
+
+app.use(auth);
+
 
 // logger
 app.use(async (ctx, next) => {
@@ -41,6 +56,6 @@ app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });
 
-app.listen(3000,()=>{
+app.listen(3001,()=>{
 	console.log("server is runining...");
 })
