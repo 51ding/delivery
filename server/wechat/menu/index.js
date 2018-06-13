@@ -23,14 +23,14 @@ const BUTTON_TYPE={
 /*一级菜单*/
 function Button(option){
 	if(!option) throw new Error("无法初始化按钮");
-    this["sub_button"]=[];
-    this.type=option.type;
-    this.name=option.name;
-    this.url=option.url;
+	if(!option.isSub) this["sub_button"]=[];
+    if(option.type) this.type=option.type;
+    if(option.name) this.name=option.name;
+    if(option.url) this.url=option.url;
 }
 
 Button.prototype.add=function(subButton){
-	if(!(subButton instanceof Button)) return throw new Error("无效的按钮类型");
+	if(!(subButton instanceof Button)) throw new Error("无效的按钮类型");
 	if(this["sub_button"].length==5) return;
 	this["sub_button"].push(subButton);
 }
@@ -44,10 +44,10 @@ function Menu(){
 
 
 Menu.prototype.add=function(button){
-	if()
+	if(!(button instanceof Button))  throw Error("无效的按钮类型");
+	this.button.push(button);
 }
 
 
-
-
+module.exports={Button,Menu,BUTTON_TYPE};
 

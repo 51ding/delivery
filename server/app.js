@@ -16,7 +16,7 @@ const config=require("./config");
 
 app.keys = config.keys;
 
-
+var init=require("./wechat/menu/init");
 
 
 // error handler
@@ -28,10 +28,23 @@ app.use(WeChat({
   token:"caowei",
   isSafeModel:false
 },async function (next){
-	 this.reply = {
+	 var message = this.message;
+	   var wechat = this.wechat;
+	 if(message.MsgType == "text"){
+	 		if(message.Content=="createMenu"){
+	 			 var token = await wechat.getAccessToken();
+      this.reply = {
         type: "text",
-        content: "感谢关注【甘肃城乡服务平台】\n 现在所有功能仍在紧张开发中，敬请期待！"
+        content: token
       }
+	 		}
+	 		else{
+	 			this.reply = {
+	        type: "text",
+	        content: "感谢关注【甘肃城乡服务平台】\n 现在所有功能仍在紧张开发中，敬请期待！"
+      	};
+	 		}
+	 } 
  }
 ));
 
