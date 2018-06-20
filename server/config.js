@@ -1,4 +1,5 @@
 module.exports = {
+  port:3000,
   env:"development",
   keys:['im a newer secret', 'i like turtle'],
   connectionString: "mongodb://127.0.0.1:27017/delivery",
@@ -11,10 +12,9 @@ module.exports = {
     rolling: false,
     renew: false,
   },
-  ignoreUrl:[
-    "/user/login",
-    "/user/register",
-    "/login",
-    "/"
-  ]
+  wechat:{
+    appID:"wx2ea795e409b2c674",
+    appsecret:"e4632492abb3de0943fc7ca20c4b27d0",
+    token:"houhanbin"
+  }
 }

@@ -50,7 +50,7 @@ module.exports = {
 
   build: {
 
-    index: path.resolve(__dirname, '../server/views/index.ejs'),
+    index: path.resolve(__dirname, '../server/views/delivery.ejs'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../server'),

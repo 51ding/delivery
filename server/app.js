@@ -5,69 +5,69 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
-const session=require("koa-session");
-var WeChat=require("koa-easywechat");
-require("./models");
+const session = require("koa-session");
+var WeChat = require("koa-easywechat");
+//require("./models");
 
 const index = require('./routes/index')
 const users = require('./routes/users')
-const auth=require("./auth");
-const config=require("./config");
+//const auth=require("./auth");
+const config = require("./config");
 
 app.keys = config.keys;
 
-var init=require("./wechat/menu/init");
+var init = require("./wechat/menu/init");
 
 
 // error handler
-onerror(app)
+onerror(app);
 app.use(logger())
 app.use(WeChat({
-  appID:"wx4277ef79398014a1",
-  appsecret:"2e1dbf5ca9b1634364370b63fe67e3e8",
-  token:"caowei",
-  isSafeModel:false
-},async function (next){
-	 var message = this.message;
-	   var wechat = this.wechat;
-	 if(message.MsgType == "text"){
-	 		if(message.Content=="createMenu"){
-	 			 var token = await wechat.getAccessToken();
-      this.reply = {
-        type: "text",
-        content: token
+    appID: "wx2ea795e409b2c674",
+    appsecret: "e4632492abb3de0943fc7ca20c4b27d0",
+    token: "houhanbin",
+    isSafeModel: false
+  }, async function (next) {
+    var message = this.message;
+    var wechat = this.wechat;
+    if (message.MsgType == "text") {
+      if (message.Content == "createMenu") {
+        var msg="生成成功！";
+        try {
+          await wechat.createMenu(init());
+        }
+        catch (e) {
+          msg="生成失败！"+e.message;
+        }
+
+        this.reply = {
+          type: "text",
+          content:msg
+        }
       }
-	 		}
-	 		else{
-	 			this.reply = {
-	        type: "text",
-	        content: "感谢关注【甘肃城乡服务平台】\n 现在所有功能仍在紧张开发中，敬请期待！"
-      	};
-	 		}
-	 } 
- }
+      else {
+        this.reply = {
+          type: "text",
+          content: "感谢关注【甘肃城乡服务平台】\n 现在所有功能仍在紧张开发中，敬请期待！"
+        };
+      }
+    }
+  }
 ));
 
-
-
-
-
-app.listen(833,()=>{
-  console.log("server is running")
-});
 // middlewares
 app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
+  enableTypes: ['json', 'form', 'text']
 }))
 app.use(json())
 
-app.use(require('koa-static')(__dirname + '/public'))
+app.use(require('koa-static')(__dirname + '/'))
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
 
-app.use(session(config.session,app))
+app.use(session(config.session, app))
 
 /*app.use(auth);*/
 
@@ -89,6 +89,6 @@ app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });
 
-app.listen(3000,()=>{
-	console.log("server is runining...");
+app.listen(config.port, () => {
+  console.log(`server is runining at ${config.port} Port`);
 })

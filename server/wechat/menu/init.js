@@ -1,5 +1,5 @@
 var {Menu,Button,BUTTON_TYPE}=require("./");
-
+var oauth=require("../../auth");
 
 module.exports=function(){
 	var menu=new Menu();
@@ -15,16 +15,17 @@ module.exports=function(){
 
 //一级菜单
 function initFirstLevel(){
+  var redirect="http://houhanbin.imwork.net/message"
 	var one=new Button({
 		type:BUTTON_TYPE.VIEW,
 		name:"快递代收",
-		url:"http://www.baidu.com",
+		url:oauth.initUrl(redirect),
 		isSub:true
 	});
 	var two=new Button({
 		type:BUTTON_TYPE.VIEW,
-		name:"快递代收",
-		url:"http://www.baidu.com",
+		name:"快递代发",
+		url:"http://houhanbin.imwork.net/index",
 		isSub:true
 	});
 	var three=new Button({
@@ -33,13 +34,13 @@ function initFirstLevel(){
 		url:"http://www.baidu.com",
 		isSub:true
 	});
-	
+
     var button=new Button({name:"快递业务"});
     button.add(one);
     button.add(two);
     button.add(three);
     return button;
-    
+
 }
 
 

@@ -8,11 +8,20 @@ exports.newAndSave = async (loginname, password) => {
   return result;
 }
 
+exports.save=async model => {
+  var user=new User(model);
+  return await user.save();
+}
+
 exports.getOneUserByLoginName = async loginname => {
   return User.findOne({loginname});
 }
 
 exports.getUsersByQuery=async query =>{
   return User.find(query);
+}
+
+exports.getOneUserByOpenId=async openid => {
+  return User.findOne({openid:openid});
 }
 
