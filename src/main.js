@@ -6,9 +6,9 @@ import VueRouter from 'vue-router'
 import App from './App'
 /*import Home from './components/HelloFromVux'*/
 import router from './router'
+import axios from "axios"
 
-
-import { Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
+import { XDialog,Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
 
 Vue.component('x-button', XButton)
 Vue.component('icon', Icon)
@@ -39,8 +39,14 @@ Vue.component('x-header', XHeader)
 Vue.component('swipeout', Swipeout)
 Vue.component('swipeout-item', SwipeoutItem)
 Vue.component('swipeout-button', SwipeoutButton)
+Vue.component('x-dialog', XDialog)
 
 
+if(process.env.NODE_ENV=="development"){
+  axios.defaults.baseURL="/api/";
+}
+
+Vue.prototype.axios=axios;
 
 Vue.use(VueRouter);
 

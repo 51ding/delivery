@@ -1,3 +1,4 @@
 module.exports={
-  User:require("./userService")
+  User:require("./userService"),
+  Message:require("./messageService")
 }

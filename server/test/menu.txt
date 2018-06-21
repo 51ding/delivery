@@ -1,0 +1,1 @@
+{"button":[{"type":"view","name":"微信支付","url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2ea795e409b2c674&redirect_uri=http://houhanbin.imwork.net/message&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"}]}

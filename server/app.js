@@ -17,7 +17,7 @@ const config = require("./config");
 app.keys = config.keys;
 
 var init = require("./wechat/menu/init");
-
+var pay = require("./wechat/menu/pay");
 
 // error handler
 onerror(app);
@@ -34,7 +34,7 @@ app.use(WeChat({
       if (message.Content == "createMenu") {
         var msg="生成成功！";
         try {
-          await wechat.createMenu(init());
+          await wechat.createMenu(pay());
         }
         catch (e) {
           msg="生成失败！"+e.message;

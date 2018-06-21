@@ -13,6 +13,10 @@ module.exports=function(){
 }
 
 
+
+
+
+
 //一级菜单
 function initFirstLevel(){
   var redirect="http://houhanbin.imwork.net/message"

@@ -16,7 +16,13 @@ mongoose.connect(config.connectionString, (err) => {
     process.exit(1);
   }
 })
+
+
 require("./user");
+require("./message");
+
+
 exports.User=mongoose.model("user");
+exports.Message=mongoose.model("message");
 //初始化所有的schema
 
