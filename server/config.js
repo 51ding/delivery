@@ -13,8 +13,10 @@ module.exports = {
     renew: false,
   },
   wechat:{
-    appID:"wx2ea795e409b2c674",
-    appsecret:"e4632492abb3de0943fc7ca20c4b27d0",
-    token:"houhanbin"
+    appID:"wxe6f2aa23be7998f8",
+    appsecret:"8f6033dcbf72f5c82d973a449b4d776b",
+    token:"dxn",
+    merchantNumber:"1502231861",
+    apiSecret:"0ci7bYic0PY1Cr0rnhumzvrJjPNQrWFx"
   }
 }

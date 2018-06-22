@@ -23,9 +23,9 @@ var pay = require("./wechat/menu/pay");
 onerror(app);
 app.use(logger())
 app.use(WeChat({
-    appID: "wx2ea795e409b2c674",
-    appsecret: "e4632492abb3de0943fc7ca20c4b27d0",
-    token: "houhanbin",
+    appID: config.wechat.appID,
+    appsecret: config.wechat.appsecret,
+    token: config.wechat.token,
     isSafeModel: false
   }, async function (next) {
     var message = this.message;
@@ -48,7 +48,7 @@ app.use(WeChat({
       else {
         this.reply = {
           type: "text",
-          content: "感谢关注【甘肃城乡服务平台】\n 现在所有功能仍在紧张开发中，敬请期待！"
+          content: "测试一下"
         };
       }
     }
