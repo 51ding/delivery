@@ -20,9 +20,10 @@ mongoose.connect(config.connectionString, (err) => {
 
 require("./user");
 require("./message");
-
+require("./address");
 
 exports.User=mongoose.model("user");
 exports.Message=mongoose.model("message");
+exports.Address=mongoose.model("address");
 //初始化所有的schema
 

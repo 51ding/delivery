@@ -5,8 +5,9 @@ var {formateTime, createTimeStamp, createNonceStr} = require("../common");
 var WxPay = require("../wechat/pay");
 var {wechat} = require("../config");
 router.get('/', async (ctx, next) => {
-  if (ctx.session.user) return await ctx.render("index");
-  await ctx.render('login', {msg: ""})
+	await ctx.render("index");
+  /* if (ctx.session.user) return await ctx.render("index");
+  await ctx.render('login', {msg: ""}) */
 })
 
 

@@ -11,6 +11,7 @@ var WeChat = require("koa-easywechat");
 
 const index = require('./routes/index')
 const users = require('./routes/users')
+const delivery=require('./routes/delivery');
 //const auth=require("./auth");
 const config = require("./config");
 
@@ -83,8 +84,9 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(delivery.routes(), delivery.allowedMethods())
 
-// error-handling
+
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });

@@ -9,20 +9,20 @@
       <swiper-item  >
         <div>
           <group  title="个人信息" label-width="4.5em" label-margin-right="2em" label-align="left">
-            <x-input title="姓名" name="username" placeholder="请填写真实姓名" is-type="china-name"></x-input>
-            <x-input title="联系方式" placeholder="输入手机号或电话号码" is-type="china-mobile"></x-input>
-            <x-address title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="left" label-align="justify"></x-address>
-            <x-textarea title="详细信息" placeholder="请填写详细信息" :show-counter="false" :rows="5"></x-textarea>
+            <x-input title="姓名" v-model="address.name" name="username" placeholder="请填写真实姓名" is-type="china-name"></x-input>
+            <x-input title="联系方式" v-model="address.phone" placeholder="输入手机号或电话号码" is-type="china-mobile"></x-input>
+            <x-address title="地址选择" v-model="address.street" raw-value :list="addressData" value-text-align="left" label-align="justify"></x-address>
+            <x-textarea title="详细信息" v-model="address.detail" placeholder="请填写详细信息" :show-counter="false" :rows="5"></x-textarea>
 
           </group>
           <group title="地址标签">
-            <radio fill-mode fill-label="其他" :selected-label-style="{color: '#09BB07'}" fill-placeholder="填写其他的哦" :options="addressSendTag" ></radio>
-            <x-switch title="设为默认寄件人地址"></x-switch>
+           <!-- <radio  :selected-label-style="{color: '#09BB07'}"  :options="addressSendTag" ></radio>-->
+            <x-switch title="设为默认寄件人地址" v-model="address.isdefault"></x-switch>
           </group>
         </div>
         <flexbox >
           <flexbox-item style="padding: 5px;">
-            <x-button type="primary">保存</x-button>
+            <x-button type="primary" @click.native="addressSave(true)">保存</x-button>
           </flexbox-item>
           <flexbox-item style="padding: 5px;">
             <x-button type="warn">取消</x-button>
@@ -34,18 +34,18 @@
           <group  title="个人信息" label-width="4.5em" label-margin-right="2em" label-align="left">
             <x-input title="姓名" name="username" placeholder="请填写真实姓名" is-type="china-name"></x-input>
             <x-input title="联系方式" placeholder="输入手机号或电话号码" is-type="china-mobile"></x-input>
-            <x-address title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="left" label-align="justify"></x-address>
+            <x-address title="地址选择" v-model="address.address" raw-value :list="addressData" value-text-align="left" label-align="justify"></x-address>
             <x-textarea title="详细信息" placeholder="请填写详细信息" :show-counter="false" :rows="5"></x-textarea>
 
           </group>
           <group title="地址标签">
-            <radio fill-mode fill-label="其他" :selected-label-style="{color: '#09BB07'}" fill-placeholder="填写其他的哦" :options="addressReceiveTag" ></radio>
+            <radio v-model="address.tag"  fill-label="其他" :selected-label-style="{color: '#09BB07'}" fill-placeholder="填写其他的哦" :options="addressReceiveTag" ></radio>
             <x-switch title="设为默认寄件人地址"></x-switch>
           </group>
         </div>
         <flexbox >
           <flexbox-item style="padding: 5px;">
-            <x-button type="primary">保存</x-button>
+            <x-button type="primary" @click.native="addressSave(false)">保存</x-button>
           </flexbox-item>
           <flexbox-item style="padding: 5px;">
             <x-button type="warn">取消</x-button>
@@ -69,9 +69,38 @@
 				addressData: ChinaAddressData,
 				addressValue: ['北京市', '市辖区', '东城区'],
 				addressSendTag:["公司","家庭"],
-        addressReceiveTag:["朋友","客户"]
+        addressReceiveTag:["朋友","客户"],
+				address:{
+					name:"侯晗彬",
+					phone:"18801410502",
+					street:['北京市', '市辖区', '东城区'],
+					detail:"你猜猜",
+					ismine:true,
+					isdefault:true
+				}
       }
-    }
+    },
+		methods:{
+			/* isMine是否保存的是我的地址 */
+			addressSave:function(isMine){
+				this.address.ismine=isMine;
+				this.axios.post("/delivery/address/save",this.address,{})
+					.then(response => {
+						if(response.data.errcode==0){
+							console.log("保存成功！");
+							this.clearAddress();
+						}
+					})
+			},
+			clearAddress(){
+				this.address.name="";
+				this.address.phone="";
+				this.address.street=[];
+				this.address.detail="";
+				this.address.ismine=false;
+				this.address.isdefault=false;
+			}
+		}
   }
 </script>
 
