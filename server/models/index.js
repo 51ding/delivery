@@ -27,6 +27,6 @@ require("./order");
 exports.User=mongoose.model("user");
 exports.Message=mongoose.model("message");
 exports.Address=mongoose.model("address");
-exports.Address=mongoose.model("order");
+exports.Order=mongoose.model("order");
 
 

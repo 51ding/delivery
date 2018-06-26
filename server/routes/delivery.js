@@ -7,8 +7,8 @@ router.prefix('/delivery')
 router.post("/address/default", async function (ctx, next) {
   /* var user=ctx.session.user;
     var openid=user.openid; */
-  var openid = "og1aW1MIOOMpB11i47aGYbt3b2qY";
-  /*var {openid}=ctx.session.user;*/
+ /* var openid = "og1aW1MIOOMpB11i47aGYbt3b2qY";*/
+  var {openid}=ctx.session.user;
   var response = {errcode: 0, errmsg: ""};
   try {
     var data = await SendDelivery.getDefaultByOpenid(openid);
@@ -22,8 +22,8 @@ router.post("/address/default", async function (ctx, next) {
 })
 
 router.post("/address/save", async (ctx) => {
-  var openid="og1aW1MIOOMpB11i47aGYbt3b2qY";
-  /*var {openid} = ctx.session.user;*/
+ /* var openid="og1aW1MIOOMpB11i47aGYbt3b2qY";*/
+  var {openid} = ctx.session.user;
   var address = ctx.request.body;
   address.openid = openid;
   var response = {errcode: 0, errmsg: ""};
@@ -39,8 +39,8 @@ router.post("/address/save", async (ctx) => {
 })
 
 router.post("/address/get", async ctx => {
-  var openid="og1aW1MIOOMpB11i47aGYbt3b2qY";
-  /*var {openid} = ctx.session.user;*/
+  /*var openid="og1aW1MIOOMpB11i47aGYbt3b2qY";*/
+  var {openid} = ctx.session.user;
   var response = {errcode: 0, errmsg: ""};
   try {
     var result = await SendDelivery.getAddressByOpenId(openid);
@@ -98,8 +98,8 @@ router.post("/address/update", async ctx => {
 router.post("/address/setdefault", async ctx => {
   var {id, ismine} = ctx.request.body;
   var response = {errcode: 0, errmsg: ""};
-  var openid = "og1aW1MIOOMpB11i47aGYbt3b2qY";
-  /*var {openid}=ctx.session.user;*/
+  /*var openid = "og1aW1MIOOMpB11i47aGYbt3b2qY";*/
+  var {openid}=ctx.session.user;
   try {
     await SendDelivery.update({openid: openid, ismine: ismine}, {isdefault: false});
     var old = await SendDelivery.getAddressById(id);
