@@ -13,9 +13,9 @@ module.exports = {
     renew: false,
   },
   wechat:{
-    appID:"wxe6f2aa23be7998f8",
-    appsecret:"8f6033dcbf72f5c82d973a449b4d776b",
-    token:"dxn",
+    appID:"wx4277ef79398014a1",
+    appsecret:"6b7b4a601da83b49af99be870fa5ef7e",
+    token:"caowei",
     merchantNumber:"1502231861",
     apiSecret:"0ci7bYic0PY1Cr0rnhumzvrJjPNQrWFx"
   }

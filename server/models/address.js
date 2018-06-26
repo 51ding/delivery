@@ -6,6 +6,7 @@ var AddressSchema=new Schema({
   name:String,
   phone:String,
   street:Array,
+  streetValue:Array,
 	detail:String,
 	tag:String,
 	ismine:Boolean,

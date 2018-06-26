@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 import axios from "axios"
 
-import { XDialog,Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
+import { Loading,XDialog,Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
 
 Vue.component('x-button', XButton)
 Vue.component('icon', Icon)
@@ -40,7 +40,7 @@ Vue.component('swipeout', Swipeout)
 Vue.component('swipeout-item', SwipeoutItem)
 Vue.component('swipeout-button', SwipeoutButton)
 Vue.component('x-dialog', XDialog)
-
+Vue.component('loading', Loading)
 
 if(process.env.NODE_ENV=="development"){
   axios.defaults.baseURL="/api/";

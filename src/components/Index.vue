@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :show="showloading" text="加载中"></loading>
     <group>
       <cell-box is-link @click.native="showPopup=true">
         <flexbox>
@@ -15,15 +16,14 @@
                 <p>{{sendInfo.phone}}</p>
               </flexbox-item>
             </flexbox>
-
             <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
-              <flexbox-item><p style="color: #999;">{{sendInfo.address}}</p></flexbox-item>
+              <flexbox-item><p style="color: #999;">{{sendInfo.street}}</p></flexbox-item>
               <flexbox-item><p style="color: #999;">{{sendInfo.detail}}</p></flexbox-item>
             </flexbox>
           </flexbox-item>
         </flexbox>
       </cell-box>
-      <cell-box is-link>
+      <cell-box is-link @click.native="showReceivePopup=true">
         <flexbox>
           <flexbox-item :span="3/16">
             <div class="typelogo1">收</div>
@@ -31,191 +31,124 @@
           <flexbox-item>
             <flexbox>
               <flexbox-item style="font-size: 1.2rem;">
-                <p>{{sendInfo.name}}</p>
+                <p>{{receiveInfo.name}}</p>
               </flexbox-item>
               <flexbox-item style="font-size: 1.2rem;">
-                <p>{{sendInfo.phone}}</p>
+                <p>{{receiveInfo.phone}}</p>
               </flexbox-item>
             </flexbox>
 
             <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
-              <flexbox-item><p style="color: #999;">{{sendInfo.address}}</p></flexbox-item>
-              <flexbox-item><p style="color: #999;">{{sendInfo.detail}}</p></flexbox-item>
+              <flexbox-item><p style="color: #999;">{{receiveInfo.street}}</p></flexbox-item>
+              <flexbox-item><p style="color: #999;">{{receiveInfo.detail}}</p></flexbox-item>
             </flexbox>
           </flexbox-item>
         </flexbox>
       </cell-box>
     </group>
-
     <popup v-model="showPopup" style="background-color: white;height:500px;" class="checker-popup">
       <x-header @header-background-color="'#009cff'"
                 style="position: fixed;left: 0;right: 0;bottom:460px;z-index: 99999;"
                 :right-options="{showMore: true}" @on-click-more="showMenus = true"
-                @on-click-back="onItemClick"
+                @on-click-back="onItemClick(true)"
                 :left-options="{preventGoBack:true}">
         <div v-transfer-dom>
-          <actionsheet  @on-click-menu="rightHeaderClick" :menus="menus" v-model="showMenus" show-cancel></actionsheet>
+          <actionsheet @on-click-menu="rightHeaderClick" :menus="menus" v-model="showMenus" show-cancel></actionsheet>
         </div>
       </x-header>
       <div style="margin-top: 41px">
         <swipeout>
-          <swipeout-item transition-mode="follow">
+          <swipeout-item transition-mode="follow" v-for="item in sendAddressList"
+                         v-bind:key="item._id">
             <div slot="right-menu">
-              <swipeout-button @click.native="onButtonClick('fav')" type="primary">编辑</swipeout-button>
-              <swipeout-button @click.native="onButtonClick('delete')" type="warn">删除</swipeout-button>
+              <swipeout-button @click.native="onButtonClick('fav',item._id)" type="primary">编辑</swipeout-button>
+              <swipeout-button @click.native="onButtonClick('delete',item._id)" type="warn">删除</swipeout-button>
             </div>
-            <div slot="content" class="demo-content vux-1px-t">
-              <cell>
+            <div slot="content" style="padding: 0;">
+              <cell value-align="left" style="border-bottom: 1px solid #c9c9c9;"
+                    @click.native="setDefault(item._id,true)">
                 <flexbox>
                   <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.name}}</p>
+                    <p style="color: black">{{item.name}}</p>
                   </flexbox-item>
                   <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.phone}}</p>
+                    <p style="color: black;">{{item.phone}}</p>
                   </flexbox-item>
                 </flexbox>
 
                 <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
-                  <flexbox-item><p style="color: #999;">{{sendInfo.address}}</p></flexbox-item>
-                  <flexbox-item><p style="color: #999;">{{sendInfo.detail}}</p></flexbox-item>
+                  <flexbox-item><p style="color: #999;">{{item.street}}</p></flexbox-item>
+                  <flexbox-item><p style="color: #999;">{{item.detail}}</p></flexbox-item>
                 </flexbox>
               </cell>
             </div>
           </swipeout-item>
-          <swipeout-item transition-mode="follow">
-            <div slot="right-menu">
-              <swipeout-button @click.native="onButtonClick('fav')" type="primary">编辑</swipeout-button>
-              <swipeout-button @click.native="onButtonClick('delete')" type="warn">删除</swipeout-button>
-            </div>
-            <div slot="content" class="demo-content vux-1px-t">
-              <cell>
-                <flexbox>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.name}}</p>
-                  </flexbox-item>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.phone}}</p>
-                  </flexbox-item>
-                </flexbox>
 
-                <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
-                  <flexbox-item><p style="color: #999;">{{sendInfo.address}}</p></flexbox-item>
-                  <flexbox-item><p style="color: #999;">{{sendInfo.detail}}</p></flexbox-item>
-                </flexbox>
-              </cell>
-            </div>
-          </swipeout-item>
-          <swipeout-item transition-mode="follow">
-            <div slot="right-menu">
-              <swipeout-button @click.native="onButtonClick('fav')" type="primary">编辑</swipeout-button>
-              <swipeout-button @click.native="onButtonClick('delete')" type="warn">删除</swipeout-button>
-            </div>
-            <div slot="content" class="demo-content vux-1px-t">
-              <cell>
-                <flexbox>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.name}}</p>
-                  </flexbox-item>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.phone}}</p>
-                  </flexbox-item>
-                </flexbox>
-
-                <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
-                  <flexbox-item><p style="color: #999;">{{sendInfo.address}}</p></flexbox-item>
-                  <flexbox-item><p style="color: #999;">{{sendInfo.detail}}</p></flexbox-item>
-                </flexbox>
-              </cell>
-            </div>
-          </swipeout-item>
-          <swipeout-item transition-mode="follow">
-            <div slot="right-menu">
-              <swipeout-button @click.native="onButtonClick('fav')" type="primary">编辑</swipeout-button>
-              <swipeout-button @click.native="onButtonClick('delete')" type="warn">删除</swipeout-button>
-            </div>
-            <div slot="content" class="demo-content vux-1px-t">
-              <cell>
-                <flexbox>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.name}}</p>
-                  </flexbox-item>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.phone}}</p>
-                  </flexbox-item>
-                </flexbox>
-
-                <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
-                  <flexbox-item><p style="color: #999;">{{sendInfo.address}}</p></flexbox-item>
-                  <flexbox-item><p style="color: #999;">{{sendInfo.detail}}</p></flexbox-item>
-                </flexbox>
-              </cell>
-            </div>
-          </swipeout-item>
-          <swipeout-item transition-mode="follow">
-            <div slot="right-menu">
-              <swipeout-button @click.native="onButtonClick('fav')" type="primary">编辑</swipeout-button>
-              <swipeout-button @click.native="onButtonClick('delete')" type="warn">删除</swipeout-button>
-            </div>
-            <div slot="content" class="demo-content vux-1px-t">
-              <cell>
-                <flexbox>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.name}}</p>
-                  </flexbox-item>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.phone}}</p>
-                  </flexbox-item>
-                </flexbox>
-
-                <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
-                  <flexbox-item><p style="color: #999;">{{sendInfo.address}}</p></flexbox-item>
-                  <flexbox-item><p style="color: #999;">{{sendInfo.detail}}</p></flexbox-item>
-                </flexbox>
-              </cell>
-            </div>
-          </swipeout-item>
-          <swipeout-item transition-mode="follow">
-            <div slot="right-menu">
-              <swipeout-button @click.native="onButtonClick('fav')" type="primary">编辑</swipeout-button>
-              <swipeout-button @click.native="onButtonClick('delete')" type="warn">删除</swipeout-button>
-            </div>
-            <div slot="content" class="demo-content vux-1px-t">
-              <cell>
-                <flexbox>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.name}}</p>
-                  </flexbox-item>
-                  <flexbox-item style="font-size: 1.2rem;">
-                    <p>{{sendInfo.phone}}</p>
-                  </flexbox-item>
-                </flexbox>
-
-                <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
-                  <flexbox-item><p style="color: #999;">{{sendInfo.address}}</p></flexbox-item>
-                  <flexbox-item><p style="color: #999;">{{sendInfo.detail}}</p></flexbox-item>
-                </flexbox>
-              </cell>
-            </div>
-          </swipeout-item>
         </swipeout>
       </div>
     </popup>
+    <popup v-model="showReceivePopup" style="background-color: white;height:500px;" class="checker-popup">
+      <x-header @header-background-color="'#009cff'"
+                style="position: fixed;left: 0;right: 0;bottom:460px;z-index: 99999;"
+                :right-options="{showMore: true}" @on-click-more="showMenus2 = true"
+                @on-click-back="onItemClick(false)"
+                :left-options="{preventGoBack:true}">
+        <div v-transfer-dom>
+          <actionsheet @on-click-menu="rightHeader2Click" :menus="menus" v-model="showMenus2" show-cancel></actionsheet>
+        </div>
+      </x-header>
+      <div style="margin-top: 41px">
+        <swipeout>
+          <swipeout-item transition-mode="follow"
+                         v-for="item in receiveAddresslist"
+                         v-bind:key="item._id"
+          >
+            <div slot="right-menu">
+              <swipeout-button @click.native="onButtonClick('fav',item._id)" type="primary">编辑</swipeout-button>
+              <swipeout-button @click.native="onButtonClick('delete',item._id)" type="warn">删除</swipeout-button>
+            </div>
+            <div slot="content" style="padding: 0;">
+              <cell value-align="left" style="border-bottom: 1px solid #c9c9c9;"
+                    @click.native="setDefault(item._id,false)">
+                <flexbox>
+                  <flexbox-item style="font-size: 1.2rem;">
+                    <p style="color: black">{{item.name}}</p>
+                  </flexbox-item>
+                  <flexbox-item style="font-size: 1.2rem;">
+                    <p style="color: black;">{{item.phone}}</p>
+                  </flexbox-item>
+                </flexbox>
 
+                <flexbox orient="vertical" :gutter="0" style="margin-top: 0.5rem;">
+                  <flexbox-item><p style="color: #999;">{{item.street}}</p></flexbox-item>
+                  <flexbox-item><p style="color: #999;">{{item.detail}}</p></flexbox-item>
+                </flexbox>
+              </cell>
+            </div>
+          </swipeout-item>
+
+        </swipeout>
+      </div>
+    </popup>
     <group>
+      <popup-picker title="快递服务"
+                    :data="merchants"
+                    v-model="order.merchant"
+                    placeholder="请选择快递服务">
+      </popup-picker>
       <popup-picker title="物品类型"
                     :data="thingType"
-                    v-model="selectedThingType"
+                    v-model="order.itemtype"
                     placeholder="请选择物品类型">
       </popup-picker>
-      <x-number title="重量(kg)" :fillable="true" :value="weight"></x-number>
-      <popup-picker title="付款方式"
-                    :data="payMethod"
-                    v-model="selectedpayMethod"
-                    placeholder="请选择付款方式">
-      </popup-picker>
-      <cell title="费用估算" :value="total">
+      <x-number title="重量(kg)" :fillable="true" v-model="order.weight"
+                :value="order.weight"
+                @on-change="weightChange"
+                :min="0"
+      ></x-number>
+      <cell title="费用估算">
         <div>
-          <span style="color: red;margin-right: 15px">{{total}}</span>元
+          <span style="color: red;margin-right: 15px">{{order.cost}}</span>元
         </div>
       </cell>
       <x-switch title="我同意快件运单契约条款" v-model="isagree"></x-switch>
@@ -256,7 +189,8 @@
 
 <script>
   import {Panel, Group, Radio} from 'vux'
-  import { XHeader, Actionsheet, TransferDom, ButtonTab, ButtonTabItem } from 'vux'
+  import {XHeader, Actionsheet, TransferDom, ButtonTab, ButtonTabItem} from 'vux'
+
   export default {
     directives: {
       TransferDom
@@ -267,39 +201,114 @@
       Radio,
       Actionsheet
     },
+    created() {
+      this.getDefaultAddress();
+      this.getAddressList();
+    },
     methods: {
-      onItemClick() {
-        this.showPopup = false
+      onItemClick(issend) {
+        if (issend) this.showPopup = false
+        else this.showReceivePopup = false;
+
       },
       submit() {
-        alert("提交成功！");
+        console.log(this.order);
       },
-      rightHeaderClick(menuKey, menuItem){
-          if(menuItem==this.menus.menu1){
-            this.$router.push('/address')
-          }
+      rightHeaderClick(menuKey, menuItem) {
+        if (menuItem == this.menus.menu1) {
+          this.$router.push('/address/1')
+        }
+      },
+      rightHeader2Click(menuKey, menuItem) {
+        if (menuItem == this.menus.menu1) {
+          this.$router.push('/address/2')
+        }
+      },
+      getDefaultAddress() {
+        this.showloading = true;
+        this.axios.post("/delivery/address/default", {})
+          .then(response => {
+            var data = response.data;
+            if (data.errcode == 0 && data.data.length > 0) {
+              var sendInfo = data.data.find(r => r.ismine == true);
+              if (sendInfo)
+                sendInfo.street = sendInfo.street.join("-");
+              var receiveInfo = data.data.find(r => r.ismine == false);
+              if (receiveInfo)
+                receiveInfo.street = receiveInfo.street.join("-");
+              this.sendInfo = sendInfo || {};
+              this.receiveInfo = receiveInfo || {};
+              this.showloading = false;
+            }
+          })
+      },
+      getAddressList() {
+        this.showloading = true;
+        this.axios.post("/delivery/address/get", {}).then(response => {
+          var data = response.data;
+          var sendAddressList = data.data.filter(r => r.ismine == true);
+          sendAddressList.forEach(r => r.street = r.street.join("-"));
+          var receiveAddresslist = data.data.filter(r => r.ismine == false);
+          receiveAddresslist.forEach(r => r.street = r.street.join("-"));
+          this.sendAddressList = sendAddressList;
+          this.receiveAddresslist = receiveAddresslist;
+          this.showloading = false;
+        })
+      },
+      onButtonClick(type, id) {
+        if (type == "delete") {
+          this.deleteAddressById(id);
+        }
+        else {
+          this.$router.push('/address/' + id);
+        }
+      },
+      deleteAddressById(id) {
+        this.axios.post("/delivery/address/delete", {id: id}).then(response => {
+          this.getAddressList();
+          this.getDefaultAddress();
+        })
+      },
+      setDefault(id, ismine) {
+        this.axios.post("/delivery/address/setdefault", {id: id, ismine: ismine}).then(response => {
+          this.getAddressList();
+          this.getDefaultAddress();
+          this.showPopup = false;
+          this.showReceivePopup = false;
+        });
+      },
+      weightChange(val) {
+        this.order.cost = val * 10;
+      },
+      saveOrder() {
+
       }
+
     },
     data() {
       return {
         type: '5',
-        sendInfo: {
-          name: "侯晗彬",
-          phone: "18801410502",
-          address: "北京市海淀区西二旗东路",
-          detail: "北京市海淀区西二旗东路北京市海淀区西二旗东"
-        },
+        sendInfo: {},
+        receiveInfo: {},
         thingType: [["文件", "数码产品", "生活用品", "服饰", "食品", "其他"]],
-        selectedThingType: [],
-        weight: 0,
-        payMethod: [["寄件人付", "收件人付"]],
+        merchants: [["顺丰快递", "中通快递", "申通快递", "圆通快递", "韵达快递"]],
         selectedpayMethod: [],
-        total: 0,
         isagree: false,
         showPopup: false,
-        showMenus:false,
+        showReceivePopup: false,
+        showMenus: false,
+        showMenus2: false,
         menus: {
           menu1: '新建地址'
+        },
+        sendAddressList: [],
+        receiveAddresslist: [],
+        showloading: true,
+        order: {
+          merchant: [],
+          itemtype: [],
+          weight: 0,
+          cost: 0
         }
       }
     }

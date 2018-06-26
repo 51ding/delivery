@@ -17,13 +17,16 @@ mongoose.connect(config.connectionString, (err) => {
   }
 })
 
+//初始化所有的schema
 
 require("./user");
 require("./message");
 require("./address");
+require("./order");
 
 exports.User=mongoose.model("user");
 exports.Message=mongoose.model("message");
 exports.Address=mongoose.model("address");
-//初始化所有的schema
+exports.Address=mongoose.model("order");
+
 

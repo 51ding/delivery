@@ -35,7 +35,7 @@ app.use(WeChat({
       if (message.Content == "createMenu") {
         var msg="生成成功！";
         try {
-          await wechat.createMenu(pay());
+          await wechat.createMenu(init());
         }
         catch (e) {
           msg="生成失败！"+e.message;

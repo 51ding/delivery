@@ -11,7 +11,7 @@ var OAUTH_TYPE = {
 }
 
 async function getOpenIdByCode(code) {
-  var url=` https://api.weixin.qq.com/sns/oauth2/access_token?appid=${wechat.appID}&secret=${wechat.appsecret}&code=${code}&grant_type=authorization_code`;
+  var url=`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${wechat.appID}&secret=${wechat.appsecret}&code=${code}&grant_type=authorization_code`;
   var openIdObject=await rp(url);
   return openIdObject;
 }

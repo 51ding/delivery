@@ -19,16 +19,16 @@ module.exports=function(){
 
 //一级菜单
 function initFirstLevel(){
-  var redirect="http://houhanbin.imwork.net/message"
+  var redirect="http://houhanbin.imwork.net/"
 	var one=new Button({
 		type:BUTTON_TYPE.VIEW,
-		name:"快递代收",
+		name:"快递代发",
 		url:oauth.initUrl(redirect),
 		isSub:true
 	});
 	var two=new Button({
 		type:BUTTON_TYPE.VIEW,
-		name:"快递代发",
+		name:"快递代收",
 		url:"http://houhanbin.imwork.net/index",
 		isSub:true
 	});
