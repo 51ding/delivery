@@ -1,4 +1,4 @@
-var {Address} = require("../models");
+var {Address,Order} = require("../models");
 
 module.exports = {
   save: async function (model) {
@@ -22,5 +22,9 @@ module.exports = {
   },
   update:async (query,option) =>{
     return await Address.updateMany(query,option);
+  },
+  saveOrder:async model => {
+    var order = new Order(model);
+    return await order.save();
   }
 }

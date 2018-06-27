@@ -66,10 +66,10 @@ class WxPay {
   createJsApiSign(timeStamp, nonceStr, packageStr, signType) {
     var args = {
       appId: this.appid,
-      timeStamp:timeStamp,
-      nonceStr:nonceStr,
-      packageStr:packageStr,
-      signType:signType
+      timeStamp: timeStamp,
+      nonceStr: nonceStr,
+      packageStr: packageStr,
+      signType: signType
     };
     var stringA = this.contactKeyValue(args).replace("packageStr", "package");
     var stringSignTemp = stringA + `&key=${wechat.apiSecret}`;

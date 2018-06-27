@@ -1,6 +1,13 @@
 <template>
   <div>
     <loading :show="showloading" text="加载中"></loading>
+    <alert v-model="ishowErrorAlert" title="提示">{{errinfo}}</alert>
+    <confirm v-model="showconfirm"
+             title="操作提示"
+             @on-confirm="comfirmDoSomething(true)"
+             @on-cancel="comfirmDoSomething(false)">
+      <p style="text-align:center;">是否确认删除?</p>
+    </confirm>
     <group>
       <cell-box is-link @click.native="showPopup=true">
         <flexbox>
@@ -212,6 +219,7 @@
 
       },
       submit() {
+        this.saveOrder();
         console.log(this.order);
       },
       rightHeaderClick(menuKey, menuItem) {
@@ -240,6 +248,10 @@
               this.receiveInfo = receiveInfo || {};
               this.showloading = false;
             }
+            else {
+              this.sendInfo = {};
+              this.receiveInfo = {};
+            }
           })
       },
       getAddressList() {
@@ -257,7 +269,8 @@
       },
       onButtonClick(type, id) {
         if (type == "delete") {
-          this.deleteAddressById(id);
+          this.showconfirm=true;
+          this.deleteid=id;
         }
         else {
           this.$router.push('/address/' + id);
@@ -270,20 +283,50 @@
         })
       },
       setDefault(id, ismine) {
-        this.axios.post("/delivery/address/setdefault", {id: id, ismine: ismine}).then(response => {
-          this.getAddressList();
-          this.getDefaultAddress();
-          this.showPopup = false;
-          this.showReceivePopup = false;
-        });
+        this.axios.post("/delivery/address/setdefault", {id: id, ismine: ismine})
+          .then(response => {
+            this.getAddressList();
+            this.getDefaultAddress();
+            this.showPopup = false;
+            this.showReceivePopup = false;
+          });
       },
       weightChange(val) {
         this.order.cost = val * 10;
       },
       saveOrder() {
-
+        this.validate();
+        this.order.send = this.sendInfo._id;
+        this.order.receive = this.receiveInfo._id;
+        this.axios.post("/order/save",this.order)
+          .then(response => {
+            if(response.data.errocode==0)
+              console.log("保存成功！");
+          })
+      },
+      validate() {
+        if (!this.sendInfo._id)
+          this.warning("请选择发货地址！");
+        else if (!this.receiveInfo._id)
+          this.warning("请选择收货地址！");
+        else if (this.order.merchant.length == 0)
+          this.warning("请选择快递服务！");
+        else if (this.order.itemtype.length == 0)
+          this.warning("请选择物品类型！");
+        else {
+        }
+      },
+      warning(msg) {
+        this.errinfo = msg;
+        this.ishowErrorAlert = true;
+      },
+      comfirmDoSomething(select) {
+        if(select){
+          this.deleteAddressById(this.deleteid);
+        }
+        else
+          this.deleteid="";
       }
-
     },
     data() {
       return {
@@ -292,7 +335,6 @@
         receiveInfo: {},
         thingType: [["文件", "数码产品", "生活用品", "服饰", "食品", "其他"]],
         merchants: [["顺丰快递", "中通快递", "申通快递", "圆通快递", "韵达快递"]],
-        selectedpayMethod: [],
         isagree: false,
         showPopup: false,
         showReceivePopup: false,
@@ -309,7 +351,11 @@
           itemtype: [],
           weight: 0,
           cost: 0
-        }
+        },
+        errinfo: "",
+        ishowErrorAlert: false,
+        showconfirm: false,
+        deleteid:""
       }
     }
   }

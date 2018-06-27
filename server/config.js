@@ -17,6 +17,7 @@ module.exports = {
     appsecret:"6b7b4a601da83b49af99be870fa5ef7e",
     token:"caowei",
     merchantNumber:"1502231861",
-    apiSecret:"0ci7bYic0PY1Cr0rnhumzvrJjPNQrWFx"
+    apiSecret:"0ci7bYic0PY1Cr0rnhumzvrJjPNQrWFx",
+    notify_url:"http://houhanbin.imwork.net/order/result"
   }
 }
