@@ -1,5 +1,5 @@
-var {formateTime}=require("../common");
+var {formateTime,createNumber}=require("../common");
 
 var date=new Date();
 
-console.log(formateTime(date));
+console.log(createNumber());

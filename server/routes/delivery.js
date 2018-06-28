@@ -33,7 +33,7 @@ router.post("/address/save", async (ctx) => {
   }
   catch (e) {
     response.errcode = -1;
-    response.errmsg.message;
+    response.errmsg=e.message;
   }
   ctx.body = response;
 })
@@ -48,7 +48,7 @@ router.post("/address/get", async ctx => {
   }
   catch (e) {
     response.errcode = -1;
-    response.errmsg.message;
+    response.errmsg=e.message;
   }
   ctx.body = response;
 })
@@ -62,7 +62,7 @@ router.post("/address/delete", async ctx => {
   }
   catch (e) {
     response.errcode = -1;
-    response.errmsg.message;
+    response.errmsg=e.message;
   }
   ctx.body = response;
 })
@@ -76,7 +76,7 @@ router.post("/address/getbyid", async ctx => {
   }
   catch (e) {
     response.errcode = -1;
-    response.errmsg.message;
+    response.errmsg=e.message;
   }
   ctx.body = response;
 })
@@ -90,7 +90,7 @@ router.post("/address/update", async ctx => {
   }
   catch (e) {
     response.errcode = -1;
-    response.errmsg.message;
+    response.errmsg=e.message;
   }
   ctx.body = response;
 })

@@ -4,6 +4,8 @@ import Index from '@/components/Index'
 import Address from '@/components/Address'
 import Test from '@/components/Test'
 import Message from '@/components/Message'
+import OrderDetail from '@/components/PaySuccess'
+import Verify from '@/components/Verify'
 
 export default new Router({
   routes: [
@@ -26,6 +28,16 @@ export default new Router({
       path: '/message',
       name: 'Message',
       component: Message
+    },
+    {
+      path:"/order/:no",
+      name:"Order",
+      component:OrderDetail
+    },
+    {
+      path:"/verify",
+      name:"Verify",
+      component:Verify
     }
   ]
 })

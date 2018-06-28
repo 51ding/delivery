@@ -35,7 +35,16 @@ module.exports = {
   /*生成随机字符串*/
   createNonceStr() {
     return Math.random().toString(36).substr(2, 15);
+  },
+
+  createNumber(digit){
+    digit=digit || 6;
+    var zero=Math.pow(10,digit);
+    var random=parseInt(Math.random()*zero);
+    return random;
   }
+
+
 }
 
 

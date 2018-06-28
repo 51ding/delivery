@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 import axios from "axios"
 
-import { Confirm,ConfirmPlugin ,Alert,Loading,XDialog,Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
+import { CellFormPreview ,Msg ,Confirm,ConfirmPlugin ,Alert,Loading,XDialog,Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
 
 Vue.component('x-button', XButton)
 Vue.component('icon', Icon)
@@ -44,8 +44,8 @@ Vue.component('loading', Loading)
 Vue.component('alert', Alert)
 Vue.component('confirm', Confirm)
 Vue.use(ConfirmPlugin)
-
-
+Vue.component('msg', Msg)
+Vue.component('cell-form-preview', CellFormPreview)
 
 if(process.env.NODE_ENV=="development"){
   axios.defaults.baseURL="/api/";

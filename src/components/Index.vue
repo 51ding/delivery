@@ -8,6 +8,12 @@
              @on-cancel="comfirmDoSomething(false)">
       <p style="text-align:center;">是否确认删除?</p>
     </confirm>
+    <cell v-if="!user.isverify" title="请先完成手机号认证。点击立即认证>>"
+          style="background-color: #f6e1c6;color: #f55a28;"
+          value-align="left"
+          @click.native="verify">
+      <icon type="warn" solt="icon"></icon>
+    </cell>
     <group>
       <cell-box is-link @click.native="showPopup=true">
         <flexbox>
@@ -160,7 +166,7 @@
       </cell>
       <x-switch title="我同意快件运单契约条款" v-model="isagree"></x-switch>
     </group>
-    <x-button style="margin-top: 15px;" @click.native="submit" type="primary" :disabled="!isagree">提交</x-button>
+    <x-button style="margin-top: 15px;" @click.native="submit" type="primary" :disabled="!isagree">下单</x-button>
   </div>
 </template>
 
@@ -191,6 +197,11 @@
     padding: 0;
   }
 
+  .verify{
+    padding: 10px 5px 0 5px;
+    color: red;
+  }
+
 
 </style>
 
@@ -209,6 +220,7 @@
       Actionsheet
     },
     created() {
+      this.getUserInfo();
       this.getDefaultAddress();
       this.getAddressList();
     },
@@ -220,7 +232,6 @@
       },
       submit() {
         this.saveOrder();
-        console.log(this.order);
       },
       rightHeaderClick(menuKey, menuItem) {
         if (menuItem == this.menus.menu1) {
@@ -269,8 +280,8 @@
       },
       onButtonClick(type, id) {
         if (type == "delete") {
-          this.showconfirm=true;
-          this.deleteid=id;
+          this.showconfirm = true;
+          this.deleteid = id;
         }
         else {
           this.$router.push('/address/' + id);
@@ -298,10 +309,13 @@
         this.validate();
         this.order.send = this.sendInfo._id;
         this.order.receive = this.receiveInfo._id;
-        this.axios.post("/order/save",this.order)
+        this.axios.post("/order/save", this.order)
           .then(response => {
-            if(response.data.errocode==0)
-              console.log("保存成功！");
+            var result = response.data;
+            var data = result.data;
+            if (result.errcode == 0 && data.unifiedorder && data.unifiedorder.return_code === "SUCCESS" && data.unifiedorder.return_msg === "OK") {
+                this.pay(data.unifiedorder);
+            }
           })
       },
       validate() {
@@ -321,11 +335,41 @@
         this.ishowErrorAlert = true;
       },
       comfirmDoSomething(select) {
-        if(select){
+        if (select) {
           this.deleteAddressById(this.deleteid);
         }
         else
-          this.deleteid="";
+          this.deleteid = "";
+      },
+      pay(params) {
+        var _this=this;
+        WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', {
+            "appId":params.appid,
+            "timeStamp":params.timeStamp,
+            "nonceStr": params.nonceStr,
+            "package": params.packageStr,
+            "signType": "MD5",
+            "paySign": params.paySign
+          },
+          function (res) {
+            if(res.err_msg == "get_brand_wcpay_request:ok"){
+              _this.$router.push('/order/'+params.param.out_trade_no);
+            }
+            else{
+              _this.warning("支付失败");
+            }
+          }
+        )
+      },
+      getUserInfo(){
+        this.axios.post("/user/get",{}).then(response => {
+            var user=response.data.data;
+            this.user=user;
+        });
+      },
+      verify(){
+        this.$router.push('/verify');
       }
     },
     data() {
@@ -355,7 +399,10 @@
         errinfo: "",
         ishowErrorAlert: false,
         showconfirm: false,
-        deleteid:""
+        deleteid: "",
+        user:{
+          isverify:true
+        }
       }
     }
   }

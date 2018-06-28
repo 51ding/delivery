@@ -28,5 +28,5 @@ exports.User=mongoose.model("user");
 exports.Message=mongoose.model("message");
 exports.Address=mongoose.model("address");
 exports.Order=mongoose.model("order");
-
+exports.SMS=mongoose.model("sms");
 
