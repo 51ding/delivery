@@ -2,6 +2,8 @@
   <div>
     <loading :show="showloading" text="加载中"></loading>
     <alert v-model="ishowErrorAlert" title="提示">{{errinfo}}</alert>
+    <x-header :left-options="{backText: '返回'}"
+              style="background-color: #637f9bfa">手机认证</x-header>
     <group>
       <x-input title="手机号码" v-model="info.phone" name="mobile" placeholder="请输入手机号码" keyboard="number"
                is-type="china-mobile"></x-input>

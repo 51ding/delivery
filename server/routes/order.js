@@ -52,6 +52,5 @@ router.post("/pay/notify", async ctx => {
   ctx.body=data;
 })
 
-
 module.exports = router;
 

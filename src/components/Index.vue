@@ -197,7 +197,7 @@
     padding: 0;
   }
 
-  .verify{
+  .verify {
     padding: 10px 5px 0 5px;
     color: red;
   }
@@ -220,9 +220,10 @@
       Actionsheet
     },
     created() {
+      this.showloading = true;
       this.getUserInfo();
-      this.getDefaultAddress();
-      this.getAddressList();
+      /* this.getDefaultAddress();
+       this.getAddressList();*/
     },
     methods: {
       onItemClick(issend) {
@@ -244,7 +245,6 @@
         }
       },
       getDefaultAddress() {
-        this.showloading = true;
         this.axios.post("/delivery/address/default", {})
           .then(response => {
             var data = response.data;
@@ -314,7 +314,7 @@
             var result = response.data;
             var data = result.data;
             if (result.errcode == 0 && data.unifiedorder && data.unifiedorder.return_code === "SUCCESS" && data.unifiedorder.return_msg === "OK") {
-                this.pay(data.unifiedorder);
+              this.pay(data.unifiedorder);
             }
           })
       },
@@ -342,33 +342,35 @@
           this.deleteid = "";
       },
       pay(params) {
-        var _this=this;
+        var _this = this;
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest', {
-            "appId":params.appid,
-            "timeStamp":params.timeStamp,
+            "appId": params.appid,
+            "timeStamp": params.timeStamp,
             "nonceStr": params.nonceStr,
             "package": params.packageStr,
             "signType": "MD5",
             "paySign": params.paySign
           },
           function (res) {
-            if(res.err_msg == "get_brand_wcpay_request:ok"){
-              _this.$router.push('/order/'+params.param.out_trade_no);
+            if (res.err_msg == "get_brand_wcpay_request:ok") {
+              _this.$router.push('/order/' + params.param.out_trade_no);
             }
-            else{
+            else {
               _this.warning("支付失败");
             }
           }
         )
       },
-      getUserInfo(){
-        this.axios.post("/user/get",{}).then(response => {
-            var user=response.data.data;
-            this.user=user;
+      getUserInfo() {
+        this.axios.post("/user/get", {}).then(response => {
+          var user = response.data.data;
+          this.user = user;
+          this.getDefaultAddress();
+          this.getAddressList();
         });
       },
-      verify(){
+      verify() {
         this.$router.push('/verify');
       }
     },
@@ -400,8 +402,8 @@
         ishowErrorAlert: false,
         showconfirm: false,
         deleteid: "",
-        user:{
-          isverify:true
+        user: {
+          isverify: true
         }
       }
     }

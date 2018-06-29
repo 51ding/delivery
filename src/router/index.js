@@ -6,13 +6,14 @@ import Test from '@/components/Test'
 import Message from '@/components/Message'
 import OrderDetail from '@/components/PaySuccess'
 import Verify from '@/components/Verify'
+import ExpressDelivery from '@/components/ExpressDelivery'
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Index',
-      component: Index
+      name: 'ExpressDelivery',
+      component: ExpressDelivery
     },
     {
       path: '/Address/:id',
@@ -38,6 +39,11 @@ export default new Router({
       path:"/verify",
       name:"Verify",
       component:Verify
+    },
+    {
+      path:"/express",
+      name:"ExpressDelivery",
+      component:ExpressDelivery
     }
   ]
 })
