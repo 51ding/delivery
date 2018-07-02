@@ -26,7 +26,8 @@ var ExpressSchema = new Schema({
   items: [{
     no: {type: String, required: true},
     weight: Array,
-    itemtype: Array
+    itemtype: Array,
+    address:String
   }],
   cost: Number,
   //商户订单号

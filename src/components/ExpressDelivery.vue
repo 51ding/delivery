@@ -1,69 +1,101 @@
 <template>
   <div>
-    <cell v-if="!user.isverify" title="请先完成手机号认证。点击立即认证>>"
-          style="background-color: #f6e1c6;color: #f55a28;"
-          value-align="left"
-          @click.native="verify">
-      <icon type="warn" solt="icon"></icon>
-    </cell>
-    <group title="联系人信息">
-      <x-input title="姓名"
-               name="username"
-               v-model="express.name"
-               placeholder="请输入姓名"
-               is-type="china-name"></x-input>
-      <x-input title="联系方式"
-               name="mobile"
-               v-model="express.phone"
-               placeholder="请输入手机号码"
-               keyboard="number" is-type="china-mobile"></x-input>
-    </group>
-    <group title="快递信息(最多只能添加三件)">
-      <cell title="添加快递" @click.native="addPopItem">
-        <x-icon type="ios-plus" class="cell-x-icon"></x-icon>
+    <alert v-model="isalerthowErrorAlert" title="提示">{{alerterrinfo}}</alert>
+    <div style="padding-bottom:100px ;">
+      <cell v-if="!user.isverify" title="请先完成手机号认证。点击立即认证>>"
+            style="background-color: #f6e1c6;color: #f55a28;"
+            value-align="left"
+            @click.native="verify">
+        <icon type="warn" solt="icon"></icon>
       </cell>
-      <!--
+      <group title="联系人信息">
+        <x-input title="姓名"
+                 name="username"
+                 v-model="express.name"
+                 placeholder="请输入姓名"
+                 is-type="china-name"></x-input>
+        <x-input title="联系方式"
+                 name="mobile"
+                 v-model="express.phone"
+                 placeholder="请输入手机号码"
+                 keyboard="number" is-type="china-mobile"></x-input>
+      </group>
+      <group title="快递信息(最多只能添加三件)">
+        <cell title="添加快递" @click.native="addPopItem">
+          <x-icon type="ios-plus" class="cell-x-icon"></x-icon>
+        </cell>
+
+        <group v-for="(item,index) in items"
+               :key="index">
+          <cell
+            :title="`订单${index+1}`"
+            is-link
+            :border-intent="false"
+            :arrow-direction="item.isarrow? 'up':'down'"
+            @click.native="item.isarrow=!item.isarrow"></cell>
+
+          <template v-if="item.isarrow">
+            <cell-form-preview
+              :border-intent="false" :list="item.items"
+            ></cell-form-preview>
+            <flexbox>
+              <flexbox-item style="padding:0 0 0 5px">
+                <x-button @click.native="onButtonClick('fav',index)" type="primary">编辑</x-button>
+              </flexbox-item>
+              <flexbox-item style="padding:0 5px">
+                <x-button @click.native="onButtonClick('delete',index)" type="warn">删除</x-button>
+              </flexbox-item>
+            </flexbox>
+          </template>
+
+        </group>
+      </group>
+      <div>
+        <x-dialog :show.sync="showToast">
+          <group title="快递信息">
+            <transition name="fade">
+              <div v-if="ishowErrorAlert"
+                   style="color:red;font-size: 17px;text-align: left;padding-left: 15px;vertical-align: middle;height: 30px;line-height: 30px;">
+                <icon style="height: 30px;line-height: 30px;" type="warn"></icon>
+                {{errinfo}}
+              </div>
+            </transition>
+            <x-input title="快递单号"
+                     v-model="item.no"
+                     placeholder="请输入快递单号" placeholder-align="right" style="text-align: left"></x-input>
+            <popup-picker title="物品类型"
+                          :data="thingType"
+                          v-model="item.itemtype"
+                          placeholder="请选择物品类型"
+                          :popup-style="style"></popup-picker>
+            <popup-picker title="物品重量"
+                          :data="weight"
+                          v-model="item.weight"
+                          placeholder="请选择物品重量"
+                          :popup-style="style"></popup-picker>
+            <x-textarea :max="200" title="收件地址" name="detail" placeholder-align="right" style="text-align: left"
+                        :rows="4"
+                        v-model="item.address" placeholder="请输入收件地址"
+                        :show-counter="false"></x-textarea>
+            <flexbox>
+              <flexbox-item style="padding: 5px;">
+                <x-button type="primary" @click.native="addItem">保存</x-button>
+              </flexbox-item>
+              <flexbox-item style="padding: 5px;">
+                <x-button type="warn" @click.native="closeItemForm">取消</x-button>
+              </flexbox-item>
+            </flexbox>
+          </group>
+        </x-dialog>
+      </div>
+    </div>
+    <group style="position: fixed;left: 0;right: 0;bottom: 0;">
       <cell title="费用">
         <div>
           <span style="color: red;margin-right: 15px">{{express.cost}}</span>元
         </div>
-      </cell>-->
-    </group>
-    <div>
-      <x-dialog :show.sync="showToast">
-        <group title="快递信息">
-          <transition name="fade">
-            <div v-if="ishowErrorAlert" style="color:red;font-size: 17px;text-align: left;padding-left: 15px;vertical-align: middle;height: 30px;line-height: 30px;"> <icon style="height: 30px;line-height: 30px;" type="warn"></icon>{{errinfo}}</div>
-          </transition>
-          <x-input title="快递单号"
-                   v-model="item.no"
-                   placeholder="请输入快递单号" placeholder-align="right" style="text-align: left"></x-input>
-          <popup-picker title="物品类型"
-                        :data="thingType"
-                        v-model="item.itemtype"
-                        placeholder="请选择物品类型"
-                        :popup-style="style"></popup-picker>
-          <popup-picker title="物品重量"
-                        :data="weight"
-                        v-model="item.weight"
-                        placeholder="请选择物品重量"
-                        :popup-style="style"></popup-picker>
-          <x-textarea :max="200" title="收件地址" name="detail" placeholder-align="right" style="text-align: left" :rows="4"
-                      v-model="item.address" placeholder="请输入收件地址"
-                      :show-counter="false"></x-textarea>
-          <flexbox>
-            <flexbox-item style="padding: 5px;">
-              <x-button type="primary" @click.native="addItem">保存</x-button>
-            </flexbox-item>
-            <flexbox-item style="padding: 5px;">
-              <x-button type="warn" @click.native="closeItemForm">取消</x-button>
-            </flexbox-item>
-          </flexbox>
-        </group>
-      </x-dialog>
-    </div>
-    <group>
-      <x-button type="primary">下单</x-button>
+      </cell>
+      <x-button type="primary" @click.native="pay">下单</x-button>
     </group>
   </div>
 </template>
@@ -90,14 +122,26 @@
           no: "",
           weight: [],
           itemtype: [],
-          address: ""
+          address: "",
+          isadd: true
         },
         style: {
           zIndex: 5555,
           height: "300px"
         },
         ishowErrorAlert: false,
-        errinfo: ""
+        errinfo: "",
+        items: [],
+        buttons1: [{
+          style: 'default',
+          text: '编辑'
+        }, {
+          style: 'primary',
+          text: "删除",
+        }],
+        currentIndex: -1,
+        isalerthowErrorAlert: false,
+        alerterrinfo: ""
       }
     },
     created() {
@@ -115,7 +159,8 @@
       },
       addPopItem() {
         if (this.express.items.length >= 3) {
-          this.alert("一个订单最多只能添加三个快递！");
+          this.isalerthowErrorAlert = true;
+          this.alerterrinfo = "一个订单最多只能添加三个快递！";
           return;
         }
         this.showToast = true;
@@ -129,39 +174,104 @@
         this.ishowErrorAlert = true;
       },
       addItem() {
-        var isvaliedate=this.valiadateItem();
-        if(!isvaliedate) return;
-        alert("保存陈功！");
-        this.express.items.push(this.item);
-        this.showToast = false;
+        var isvaliedate = this.valiadateItem();
+        if (!isvaliedate) return;
+        /*是新加的数据*/
+        if (this.item.isadd) {
+          this.express.items.push(this.item);
+          this.formateItem(this.item);
+          this.showToast = false;
+        }
+        else {
+          this.showToast = false;
+          this.formateItem(this.item);
+        }
         this.clearItem();
       },
       clearItem() {
-        this.ishowErrorAlert=false;
-        this.errinfo="";
+        this.ishowErrorAlert = false;
+        this.errinfo = "";
         this.item = {
           no: "",
           weight: [],
           itemtype: [],
-          address: ""
+          address: "",
+          isadd: true
         }
       },
-      valiadateItem(){
-        var isvalidate=false;
-        var msg="";
-        if(!this.item.no)
-          msg="请输入快递单号!";
-        else if(this.item.itemtype.length==0)
-          msg="请选择物品类型!";
-        else if(this.item.weight.length==0)
-          msg="请选择物品重量!";
-        else if(!this.item.address)
-          msg="请输入收件地址!";
-        else{
-          isvalidate=true;
+      valiadateItem() {
+        var isvalidate = false;
+        var msg = "";
+        if (!this.item.no)
+          msg = "请输入快递单号!";
+        else if (this.item.itemtype.length == 0)
+          msg = "请选择物品类型!";
+        else if (this.item.weight.length == 0)
+          msg = "请选择物品重量!";
+        else if (!this.item.address)
+          msg = "请输入收件地址!";
+        else {
+          isvalidate = true;
         }
-        if(!isvalidate) this.alert(msg);
+        if (!isvalidate) this.alert(msg);
         return isvalidate;
+      },
+      onButtonClick(type, identifier) {
+        /*编辑*/
+        if (type == "fav") {
+          this.item = this.express.items[identifier];
+          this.item.isadd = false;
+          this.showToast = true;
+          this.currentIndex = identifier;
+        }
+        /*删除*/
+        else {
+          this.express.items.splice(identifier, 1);
+          this.items.splice(identifier, 1);
+          this.clearItem();
+        }
+      },
+      formateItem(item) {
+        var no = {label: "快递单号", value: item.no};
+        var weight = {label: "物品重量", value: item.weight[0]};
+        var itemtype = {label: "物品类型", value: item.itemtype[0]};
+        var address = {label: "收件地址", value: item.address};
+        var newItem = {isarrow: item.isarrow, items: [no, weight, itemtype, address]};
+        if (item.isadd) {
+          this.items.push(newItem);
+        }
+        else {
+          this.items[this.currentIndex].isarrow = true;
+          this.items[this.currentIndex].items = [no, weight, itemtype, address];
+        }
+      },
+      showalert(msg) {
+        this.isalerthowErrorAlert = true;
+        this.alerterrinfo = msg;
+      },
+      validatePhone(phone) {
+        var expression = /^0?(13[0-9]|15[012356789]|18[012346789]|14[57]|17[678]|170[059]|14[57]|166|19[89])[0-9]{8}$/;
+        var reg = new RegExp(expression);
+        if (!reg.test(phone)) {
+          return false;
+        }
+        return true;
+      },
+      pay() {
+        var isValidate = false;
+        if (!this.express.name)
+          this.showalert("请输入联系人姓名！");
+        else if (!this.validatePhone(this.express.phone)) {
+          this.showalert("无效的电话号码！");
+          return false;
+        }
+        else if (this.express.items.length == 0)
+          this.showalert("请至少添加添加一条快递信息！");
+        else
+          isValidate = true;
+        if (isValidate)
+          alert("chegnle!");
+        else return;
       }
     }
   }
@@ -201,8 +311,13 @@
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
   }
+
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
+  }
+
+  .weui-form-preview__hd {
+    display: none;
   }
 
 </style>
