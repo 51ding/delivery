@@ -19,6 +19,11 @@
                  v-model="express.phone"
                  placeholder="请输入手机号码"
                  keyboard="number" is-type="china-mobile"></x-input>
+        <popup-picker title="乡镇"
+                      :data="township"
+                      v-model="express.township"
+                      placeholder="请选择乡镇"
+                      :popup-style="style"></popup-picker>
       </group>
       <group title="快递信息(最多只能添加三件)">
         <cell title="添加快递" @click.native="addPopItem">
@@ -63,6 +68,9 @@
             <x-input title="快递单号"
                      v-model="item.no"
                      placeholder="请输入快递单号" placeholder-align="right" style="text-align: left"></x-input>
+            <x-input title="快递名称"
+                     v-model="item.name"
+                     placeholder="请输入快递名称" placeholder-align="right" style="text-align: left"></x-input>
             <popup-picker title="物品类型"
                           :data="thingType"
                           v-model="item.itemtype"
@@ -123,7 +131,8 @@
           weight: [],
           itemtype: [],
           address: "",
-          isadd: true
+          isadd: true,
+          name:""
         },
         style: {
           zIndex: 5555,
@@ -141,7 +150,8 @@
         }],
         currentIndex: -1,
         isalerthowErrorAlert: false,
-        alerterrinfo: ""
+        alerterrinfo: "",
+        township:[["汉源镇", "长道镇", "何坝镇", "姜席镇", "石峡镇", "洛峪镇", "马元镇", "大桥镇", "西峪镇"]]
       }
     },
     created() {
@@ -187,6 +197,7 @@
           this.formateItem(this.item);
         }
         this.clearItem();
+        this.setTotal();
       },
       clearItem() {
         this.ishowErrorAlert = false;
@@ -196,7 +207,8 @@
           weight: [],
           itemtype: [],
           address: "",
-          isadd: true
+          isadd: true,
+          name:""
         }
       },
       valiadateItem() {
@@ -229,14 +241,16 @@
           this.express.items.splice(identifier, 1);
           this.items.splice(identifier, 1);
           this.clearItem();
+          this.setTotal();
         }
       },
       formateItem(item) {
         var no = {label: "快递单号", value: item.no};
+        var name={label:"快递名称",value:item.name};
         var weight = {label: "物品重量", value: item.weight[0]};
         var itemtype = {label: "物品类型", value: item.itemtype[0]};
         var address = {label: "收件地址", value: item.address};
-        var newItem = {isarrow: item.isarrow, items: [no, weight, itemtype, address]};
+        var newItem = {isarrow: item.isarrow, items: [no, name,weight, itemtype, address]};
         if (item.isadd) {
           this.items.push(newItem);
         }
@@ -269,9 +283,45 @@
           this.showalert("请至少添加添加一条快递信息！");
         else
           isValidate = true;
-        if (isValidate)
-          alert("chegnle!");
+        if (isValidate){
+          this.axios.post("/order/exress/save",this.express).then(response => {
+            var result = response.data;
+            var data = result.data;
+            if (result.errcode == 0 && data.unifiedorder && data.unifiedorder.return_code === "SUCCESS" && data.unifiedorder.return_msg === "OK") {
+              this.topay(data.unifiedorder);
+            }
+          });
+        }
         else return;
+      },
+      topay(params){
+        var _this = this;
+        WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', {
+            "appId": params.appid,
+            "timeStamp": params.timeStamp,
+            "nonceStr": params.nonceStr,
+            "package": params.packageStr,
+            "signType": "MD5",
+            "paySign": params.paySign
+          },
+          function (res) {
+            if (res.err_msg == "get_brand_wcpay_request:ok") {
+              _this.$router.push('/order/' + params.param.out_trade_no);
+            }
+            else {
+              _this.warning("支付失败");
+            }
+          }
+        )
+      },
+      setTotal(){
+        console.log(this.express);
+        var total=0;
+        this.express.items.forEach(r=>{
+          total+=(r.weight[0]=="小件(重量低于5kg)" ? 3 :5);
+        });
+        this.express.cost=total;
       }
     }
   }

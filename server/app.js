@@ -7,6 +7,8 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const session = require("koa-session");
 var WeChat = require("koa-easywechat");
+var request=require("request");
+var requertPromise=require("request-promise");
 //require("./models");
 
 
@@ -48,10 +50,31 @@ app.use(WeChat({
           content:msg
         }
       }
+      else if (message.Content == "素材"){
+        var token=await wechat.getAccessToken();
+        var urlStr=`https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=${token}`;
+        var options = {
+          method: 'POST',
+          uri: urlStr,
+          body:{
+            type:"news",
+            offset:0,
+            count:20
+          },
+          json: true
+        };
+        console.log(options);
+        var result=await requertPromise(options);
+        console.info(result);
+        this.reply = {
+          type: "text",
+          content: "成功"
+        };
+      }
       else {
         this.reply = {
           type: "text",
-          content: "测试一下"
+          content: "感谢关注【甘肃城乡服务平台】,我们将携程为您服务!"
         };
       }
     }

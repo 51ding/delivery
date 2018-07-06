@@ -27,7 +27,15 @@ router.get("/express",oauth,async (ctx, next) => {
   await ctx.render("express");
 })
 
-
+router.get("/order",oauth,async (ctx, next) => {
+  var userInfo = ctx.userInfo;
+  var user = await User.getOneUserByOpenId(userInfo.openid);
+  if (!user) {
+    user = await User.save(userInfo);
+  }
+  ctx.session.user = user;
+  await ctx.render("order");
+})
 
 
 router.get('/message', oauth, async (ctx, next) => {

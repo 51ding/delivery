@@ -7,7 +7,7 @@ import Message from '@/components/Message'
 import OrderDetail from '@/components/PaySuccess'
 import Verify from '@/components/Verify'
 import ExpressDelivery from '@/components/ExpressDelivery'
-
+import Order from '@/components/Order'
 export default new Router({
   routes: [
     {

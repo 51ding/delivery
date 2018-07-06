@@ -27,6 +27,7 @@ function Button(option){
     if(option.type) this.type=option.type;
     if(option.name) this.name=option.name;
     if(option.url) this.url=option.url;
+    if(option.media_id) this.media_id=option.media_id;
 }
 
 Button.prototype.add=function(subButton){

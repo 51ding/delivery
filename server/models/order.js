@@ -15,7 +15,8 @@ var OrderSchema = new Schema({
   //商户订单号
   out_trade_no: {type: String, required: true},
   //标价金额
-  total_fee: Number
+  total_fee: Number,
+  createdon:{type:Date,default:new Date()}
 })
 
 /*收件模型*/
@@ -23,11 +24,14 @@ var ExpressSchema = new Schema({
   openid: {type: String, required: true},
   name: {type: String, required: true},
   phone: {type: String, required: true},
+  township:Array,
+  createdon:{type:Date,default:new Date()},
   items: [{
     no: {type: String, required: true},
     weight: Array,
     itemtype: Array,
-    address:String
+    address:String,
+    name:String
   }],
   cost: Number,
   //商户订单号

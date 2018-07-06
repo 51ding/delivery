@@ -303,7 +303,7 @@
           });
       },
       weightChange(val) {
-        this.order.cost = val * 10;
+        /*this.order.cost = val * 10;*/
       },
       saveOrder() {
         this.validate();
@@ -396,7 +396,7 @@
           merchant: [],
           itemtype: [],
           weight: 0,
-          cost: 0
+          cost: 13
         },
         errinfo: "",
         ishowErrorAlert: false,

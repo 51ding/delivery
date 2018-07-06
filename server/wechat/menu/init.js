@@ -16,7 +16,8 @@ module.exports = function () {
 //一级菜单
 function initFirstLevel() {
   var redirect = "http://houhanbin.imwork.net/";
-  var express = "http://houhanbin.imwork.net/express"
+  var express = "http://houhanbin.imwork.net/express";
+  var order="http://houhanbin.imwork.net/order";
   var one = new Button({
     type: BUTTON_TYPE.VIEW,
     name: "快递代发",
@@ -32,7 +33,7 @@ function initFirstLevel() {
   var three = new Button({
     type: BUTTON_TYPE.VIEW,
     name: "我的订单",
-    url: "http://mp.weixin.qq.com/bizmall/mallshelf?id=&t=mall/list&biz=MzU2NjYyMjMzOQ==&shelf_id=2&showwxpaytitle=1#wechat_redirect",
+    url:oauth.initUrl(order),
     isSub: true
   });
   var button = new Button({name: "快递业务"});
@@ -52,49 +53,43 @@ function initSecondStep() {
     url: "http://mp.weixin.qq.com/bizmall/mallshelf?id=&t=mall/list&biz=MzU2NjYyMjMzOQ==&shelf_id=2&showwxpaytitle=1#wechat_redirect",
     isSub: true
   });
-  var two = new Button({
+  /*var two = new Button({
     type: BUTTON_TYPE.VIEW,
     name: "二手产品",
     url: "http://mp.weixin.qq.com/bizmall/mallshelf?id=&t=mall/list&biz=MzU2NjYyMjMzOQ==&shelf_id=2&showwxpaytitle=1#wechat_redirect",
     isSub: true
-  });
+  });*/
 
   var button = new Button({name: "移动商城"});
   button.add(one);
-  button.add(two);
+ /* button.add(two);*/
   return button;
 }
 
 //一级菜单
 function initThirdStep() {
   var one = new Button({
-    type: BUTTON_TYPE.VIEW,
+    type: BUTTON_TYPE.MEDIA_ID,
     name: "公司简介",
-    url: "http://www.baidu.com",
+    media_id:"ltcryw-XPadDi1QW_uRc-evcihyE7AeLZnOQoGpso5U",
     isSub: true
   });
   var two = new Button({
-    type: BUTTON_TYPE.VIEW,
+    type: BUTTON_TYPE.MEDIA_ID,
     name: "联系我们",
-    url: "http://www.baidu.com",
+    media_id:"ltcryw-XPadDi1QW_uRc-Z6xFZIKQGaWleRvqLywk4I",
     isSub: true
   });
   var three = new Button({
-    type: BUTTON_TYPE.VIEW,
+    type: BUTTON_TYPE.MEDIA_ID,
     name: "留言墙",
-    url: "http://www.baidu.com",
+    media_id:"ltcryw-XPadDi1QW_uRc-W42HtPDVlQF7y-olQDXaRE",
     isSub: true
   });
-  var four = new Button({
-    type: BUTTON_TYPE.VIEW,
-    name: "我的订单",
-    url: "http://www.baidu.com",
-    isSub: true
-  });
+
   var button = new Button({name: "我的服务"});
   button.add(one);
   button.add(two);
   button.add(three);
-  button.add(four);
   return button;
 }

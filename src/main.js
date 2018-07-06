@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 import axios from "axios"
 
-import { FormPreview ,CellFormPreview ,Msg ,Confirm,ConfirmPlugin ,Alert,Loading,XDialog,Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
+import { ButtonTab, ButtonTabItem,FormPreview ,CellFormPreview ,Msg ,Confirm,ConfirmPlugin ,Alert,Loading,XDialog,Swipeout, SwipeoutItem, SwipeoutButton ,XHeader ,XNumber ,PopupPicker,Popup,Checker, CheckerItem,Cell,CellBox ,Panel,Flexbox, FlexboxItem,XButton,Icon,Sticky,Tab, TabItem,Swiper,SwiperItem,Group,XInput,XAddress,XTextarea,Radio,XSwitch } from 'vux'
 
 Vue.component('x-button', XButton)
 Vue.component('icon', Icon)
@@ -47,7 +47,8 @@ Vue.use(ConfirmPlugin)
 Vue.component('msg', Msg)
 Vue.component('cell-form-preview', CellFormPreview)
 Vue.component('form-preview', FormPreview)
-
+Vue.component('button-tab', ButtonTab)
+Vue.component('button-tab-item', ButtonTabItem)
 
 if(process.env.NODE_ENV=="development"){
   axios.defaults.baseURL="/api/";
