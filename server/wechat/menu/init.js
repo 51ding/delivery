@@ -68,6 +68,7 @@ function initSecondStep() {
 
 //一级菜单
 function initThirdStep() {
+  var leaveMessage="http://houhanbin.imwork.net/message";
   var one = new Button({
     type: BUTTON_TYPE.MEDIA_ID,
     name: "公司简介",
@@ -81,9 +82,9 @@ function initThirdStep() {
     isSub: true
   });
   var three = new Button({
-    type: BUTTON_TYPE.MEDIA_ID,
+    type: BUTTON_TYPE.VIEW,
     name: "留言墙",
-    media_id:"ltcryw-XPadDi1QW_uRc-W42HtPDVlQF7y-olQDXaRE",
+    url: oauth.initUrl(leaveMessage),
     isSub: true
   });
 

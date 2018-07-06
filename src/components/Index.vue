@@ -306,7 +306,8 @@
         /*this.order.cost = val * 10;*/
       },
       saveOrder() {
-        this.validate();
+        var isvalidate=this.validate();
+        if(!isvalidate) return;
         this.order.send = this.sendInfo._id;
         this.order.receive = this.receiveInfo._id;
         this.axios.post("/order/save", this.order)
@@ -319,6 +320,7 @@
           })
       },
       validate() {
+        var isvalidate=false;
         if (!this.sendInfo._id)
           this.warning("请选择发货地址！");
         else if (!this.receiveInfo._id)
@@ -328,7 +330,9 @@
         else if (this.order.itemtype.length == 0)
           this.warning("请选择物品类型！");
         else {
+          isvalidate=true;
         }
+        return isvalidate;
       },
       warning(msg) {
         this.errinfo = msg;

@@ -12,8 +12,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'ExpressDelivery',
-      component: ExpressDelivery
+      name: 'Message',
+      component: Message
     },
     {
       path: '/Address/:id',

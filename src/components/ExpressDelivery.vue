@@ -132,7 +132,7 @@
           itemtype: [],
           address: "",
           isadd: true,
-          name:""
+          name: ""
         },
         style: {
           zIndex: 5555,
@@ -151,7 +151,7 @@
         currentIndex: -1,
         isalerthowErrorAlert: false,
         alerterrinfo: "",
-        township:[["汉源镇", "长道镇", "何坝镇", "姜席镇", "石峡镇", "洛峪镇", "马元镇", "大桥镇", "西峪镇"]]
+        township: [["汉源镇", "长道镇", "何坝镇", "姜席镇", "石峡镇", "洛峪镇", "马元镇", "大桥镇", "西峪镇"]]
       }
     },
     created() {
@@ -208,7 +208,7 @@
           itemtype: [],
           address: "",
           isadd: true,
-          name:""
+          name: ""
         }
       },
       valiadateItem() {
@@ -246,11 +246,11 @@
       },
       formateItem(item) {
         var no = {label: "快递单号", value: item.no};
-        var name={label:"快递名称",value:item.name};
+        var name = {label: "快递名称", value: item.name};
         var weight = {label: "物品重量", value: item.weight[0]};
         var itemtype = {label: "物品类型", value: item.itemtype[0]};
         var address = {label: "收件地址", value: item.address};
-        var newItem = {isarrow: item.isarrow, items: [no, name,weight, itemtype, address]};
+        var newItem = {isarrow: item.isarrow, items: [no, name, weight, itemtype, address]};
         if (item.isadd) {
           this.items.push(newItem);
         }
@@ -283,8 +283,8 @@
           this.showalert("请至少添加添加一条快递信息！");
         else
           isValidate = true;
-        if (isValidate){
-          this.axios.post("/order/exress/save",this.express).then(response => {
+        if (isValidate) {
+          this.axios.post("/order/exress/save", this.express).then(response => {
             var result = response.data;
             var data = result.data;
             if (result.errcode == 0 && data.unifiedorder && data.unifiedorder.return_code === "SUCCESS" && data.unifiedorder.return_msg === "OK") {
@@ -294,7 +294,7 @@
         }
         else return;
       },
-      topay(params){
+      topay(params) {
         var _this = this;
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest', {
@@ -315,13 +315,22 @@
           }
         )
       },
-      setTotal(){
-        console.log(this.express);
-        var total=0;
-        this.express.items.forEach(r=>{
-          total+=(r.weight[0]=="小件(重量低于5kg)" ? 3 :5);
+      setTotal() {
+        var total = 0;
+        var isCal = false;
+        this.express.items.forEach(r => {
+          if (!isCal && r.weight[0] == "小件(重量低于5kg)") {
+            total += 3;
+            isCal=true;
+          }
+          else if(isCal && r.weight[0] != "小件(重量低于5kg)"){
+            total += 5;
+          }
+          else{
+
+          }
         });
-        this.express.cost=total;
+        this.express.cost = total;
       }
     }
   }

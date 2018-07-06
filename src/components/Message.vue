@@ -1,10 +1,10 @@
 <template>
-  <div style="height: 100%;">
+  <div style="height: 100%;" >
+    <img src="../assets/message.jpg"  style="position: fixed;left: 0;right: 0;bottom:20px;opacity: .3;top: 0;z-index: 4999" width="100%;opacity:.3" height="93%" alt="">
     <panel header="留言列表"
            :list="list" :type="type"
            @on-click-item="showMessagwDetial"
-           style="margin-bottom: 35px"
-    >
+           style="margin-bottom: 35px;color:black;">
 
     </panel>
     <x-button type="primary" @click.native="setleaveMessage" class="message">我要留言</x-button>
@@ -117,5 +117,6 @@
       margin-top: 8px;
       margin-bottom: 8px;
     }
+
   }
 </style>

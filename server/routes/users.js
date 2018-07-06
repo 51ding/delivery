@@ -40,7 +40,7 @@ router.post("/logout", async function (ctx, next) {
 
 router.post("/get", async ctx => {
   var {openid} = ctx.session.user;
-  /*var openid = "og1aW1MIOOMpB11i47aGYbt3b2qY";
+/*  var openid = "og1aW1MIOOMpB11i47aGYbt3b2qY";
   /!*上线需要删除！*!/
   ctx.session.user=await User.getOneUserByOpenId(openid);*/
 
