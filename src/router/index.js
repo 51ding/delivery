@@ -12,8 +12,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Message',
-      component: Message
+      name: 'Index',
+      component: Index
     },
     {
       path: '/Address/:id',
