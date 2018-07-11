@@ -12,3 +12,4 @@ server/node_modules
 *.ntvs*
 *.njsproj
 *.sln
+server/config.js
