@@ -25,7 +25,7 @@ var ExpressSchema = new Schema({
   name: {type: String, required: true},
   phone: {type: String, required: true},
   township:Array,
-  createdon:{type:Date,default:new Date()},
+  createdon:{type:Date,default:Date.now()},
   items: [{
     no: {type: String, required: true},
     weight: Array,
@@ -39,6 +39,18 @@ var ExpressSchema = new Schema({
   //标价金额
   total_fee: Number
 });
+
+OrderSchema.pre("save",async function (next) {
+  if(this.isNew)
+    this.createdon=new Date();
+  await next();
+})
+
+ExpressSchema.pre("save",async function (next) {
+  if(this.isNew)
+    this.createdon=new Date();
+  await next();
+})
 
 mongoose.model("order", OrderSchema);
 mongoose.model("express", ExpressSchema);

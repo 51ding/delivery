@@ -327,7 +327,7 @@
             total += 5;
           }
           else{
-
+            total += 5
           }
         });
         this.express.cost = total;
