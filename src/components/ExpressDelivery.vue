@@ -25,9 +25,9 @@
                       placeholder="请选择乡镇"
                       :popup-style="style"></popup-picker>
       </group>
-      <group title="快递信息(最多只能添加三件)">
+      <group title="快递信息">
         <cell title="添加快递" @click.native="addPopItem">
-          <x-icon type="ios-plus" class="cell-x-icon"></x-icon>
+          <x-icon type="ios-plus" v-if="express.items.length == 0 " class="cell-x-icon"></x-icon>
         </cell>
 
         <group v-for="(item,index) in items"
@@ -168,10 +168,11 @@
         this.$router.push('/verify');
       },
       addPopItem() {
-        if (this.express.items.length >= 3) {
-          this.isalerthowErrorAlert = true;
-          this.alerterrinfo = "一个订单最多只能添加三个快递！";
-          return;
+        if (this.express.items.length >= 1) {
+          return ;
+          // this.isalerthowErrorAlert = true;
+          // this.alerterrinfo = "一个订单最多只能添加三个快递！";
+          // return;
         }
         this.showToast = true;
       },
@@ -320,7 +321,7 @@
         var isCal = false;
         this.express.items.forEach(r => {
           if (!isCal && r.weight[0] == "小件(重量低于5kg)") {
-            total += 3;
+            total += 4;
             isCal=true;
           }
           else if(isCal && r.weight[0] != "小件(重量低于5kg)"){
