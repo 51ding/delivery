@@ -27,7 +27,7 @@
       </group>
       <group title="快递信息">
         <cell title="添加快递" @click.native="addPopItem">
-          <x-icon type="ios-plus" v-if="express.items.length == 0 " class="cell-x-icon"></x-icon>
+          <x-icon type="ios-plus" v-if="express.items.length < 3" class="cell-x-icon"></x-icon>
         </cell>
 
         <group v-for="(item,index) in items"
@@ -168,12 +168,9 @@
         this.$router.push('/verify');
       },
       addPopItem() {
-        if (this.express.items.length >= 1) {
-          return ;
           // this.isalerthowErrorAlert = true;
           // this.alerterrinfo = "一个订单最多只能添加三个快递！";
           // return;
-        }
         this.showToast = true;
       },
       closeItemForm() {
@@ -289,13 +286,13 @@
             var result = response.data;
             var data = result.data;
             if (result.errcode == 0 && data.unifiedorder && data.unifiedorder.return_code === "SUCCESS" && data.unifiedorder.return_msg === "OK") {
-              this.topay(data.unifiedorder);
+              this.topay(data.unifiedorder,data.order._id);
             }
           });
         }
         else return;
       },
-      topay(params) {
+      topay(params,id) {
         var _this = this;
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest', {
@@ -307,8 +304,9 @@
             "paySign": params.paySign
           },
           function (res) {
+            //支付成功
             if (res.err_msg == "get_brand_wcpay_request:ok") {
-              _this.$router.push('/order/' + params.param.out_trade_no);
+              _this.paySuccess(params,id);
             }
             else {
               _this.warning("支付失败");
@@ -332,6 +330,11 @@
           }
         });
         this.express.cost = total;
+      },
+      paySuccess(params,id){
+        this.axios.post("/order/paysuccess",{type:"express",id:id}).then(res =>{
+          this.$router.push('/order/' + params.param.out_trade_no);
+        })
       }
     }
   }

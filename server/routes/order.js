@@ -79,11 +79,11 @@ router.post("/exress/save", async ctx => {
 
 router.post("/all", async ctx => {
   var {openid} = ctx.session.user;
- /* var openid = "og1aW1MIOOMpB11i47aGYbt3b2qY";*/
+  /* var openid = "og1aW1MIOOMpB11i47aGYbt3b2qY";*/
   var response = {errcode: 0, errmsg: ""};
   try {
-    var result=await Order.getOrderByOpenId(openid);
-    response.data=result;
+    var result = await Order.getOrderByOpenId(openid);
+    response.data = result;
   }
   catch (e) {
     response.errcode = -1;
@@ -91,6 +91,20 @@ router.post("/all", async ctx => {
   }
   ctx.body = response;
 })
+
+router.post("/paysuccess", async ctx => {
+  var {type, id} = ctx.request.body;
+  var response = {errcode: 0, errmsg: ""};
+  try {
+    var result = Order.findByIdAndUpdate(type, id, {ispay: true});
+    response.data = result;
+  }
+  catch (e) {
+    response.errcode = -1;
+    response.errmsg = e.message;
+  }
+  ctx.body = response;
+});
 
 module.exports = router;
 

@@ -16,7 +16,9 @@ var OrderSchema = new Schema({
   out_trade_no: {type: String, required: true},
   //标价金额
   total_fee: Number,
-  createdon:{type:Date,default:new Date()}
+  createdon: {type: Date, default: new Date()},
+  //是否支付成功
+  ispay: {type: Boolean, default: false}
 })
 
 /*收件模型*/
@@ -24,31 +26,33 @@ var ExpressSchema = new Schema({
   openid: {type: String, required: true},
   name: {type: String, required: true},
   phone: {type: String, required: true},
-  township:Array,
-  createdon:{type:Date,default:Date.now()},
+  township: Array,
+  createdon: {type: Date, default: Date.now()},
   items: [{
     no: {type: String, required: true},
     weight: Array,
     itemtype: Array,
-    address:String,
-    name:String
+    address: String,
+    name: String
   }],
   cost: Number,
   //商户订单号
   out_trade_no: {type: String, required: true},
   //标价金额
-  total_fee: Number
+  total_fee: Number,
+  //是否支付成功
+  ispay: {type: Boolean, default: false}
 });
 
-OrderSchema.pre("save",async function (next) {
-  if(this.isNew)
-    this.createdon=new Date();
+OrderSchema.pre("save", async function (next) {
+  if (this.isNew)
+    this.createdon = new Date();
   await next();
 })
 
-ExpressSchema.pre("save",async function (next) {
-  if(this.isNew)
-    this.createdon=new Date();
+ExpressSchema.pre("save", async function (next) {
+  if (this.isNew)
+    this.createdon = new Date();
   await next();
 })
 
