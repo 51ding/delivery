@@ -315,7 +315,7 @@
             var result = response.data;
             var data = result.data;
             if (result.errcode == 0 && data.unifiedorder && data.unifiedorder.return_code === "SUCCESS" && data.unifiedorder.return_msg === "OK") {
-              this.pay(data.unifiedorder);
+              this.pay(data.unifiedorder,data.order._id);
             }
           })
       },
@@ -345,7 +345,7 @@
         else
           this.deleteid = "";
       },
-      pay(params) {
+      pay(params,id) {
         var _this = this;
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest', {
@@ -358,7 +358,7 @@
           },
           function (res) {
             if (res.err_msg == "get_brand_wcpay_request:ok") {
-              _this.$router.push('/order/' + params.param.out_trade_no);
+              _this.paySuccess(params,id)
             }
             else {
               _this.warning("支付失败");
@@ -376,6 +376,11 @@
       },
       verify() {
         this.$router.push('/verify');
+      },
+      paySuccess(params,id){
+        this.axios.post("/order/paysuccess",{type:"order",id:id}).then(res =>{
+          this.$router.push('/order/' + params.param.out_trade_no);
+        })
       }
     },
     data() {
